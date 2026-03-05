@@ -1,4 +1,3 @@
-// SecurityConfig.java
 package com.immocorp.config;
 
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
-    private final UserDetailsServiceImpl userDetailsService; // ✅ injection directe
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -36,7 +35,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
@@ -44,8 +44,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -65,12 +63,13 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        // ✅ Autoriser Swagger
+                        .requestMatchers("/api/paiements/fedapay/callback").permitAll() // ✅ FedaPay
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**",
-                                "/v3/api-docs"
+                                "/v3/api-docs",
+                                "/api/paiements/quittances/*/pdf"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
