@@ -1,5 +1,6 @@
 package com.immocorp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
@@ -28,8 +29,10 @@ public class Paiement {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bail_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "paiements", "propriete", "locataire"})
     private Bail bail;
 
     @OneToOne(mappedBy = "paiement", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "paiement"})
     private Quittance quittance;
 }
