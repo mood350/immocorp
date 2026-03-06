@@ -2,31 +2,35 @@ package com.immocorp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "alertes")
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Alerte {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TypeAlerte type; // RETARD_PAIEMENT, ECHEANCE_BAIL, etc.
+    private TypeAlerte type;
 
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false)
     private String message;
 
-    @Column(nullable = false)
     private LocalDateTime dateAlerte;
 
-    @Column(nullable = false)
+    @Builder.Default // ✅ Ajouter cette annotation
     private boolean estLue = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "proprietaire_id", nullable = false)
+    @JoinColumn(name = "proprietaire_id")
     private Utilisateur proprietaire;
 
     @ManyToOne(fetch = FetchType.LAZY)
