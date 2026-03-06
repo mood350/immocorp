@@ -1,12 +1,10 @@
-// PaiementController.java
 package com.immocorp.controller;
 
+import com.immocorp.dto.PaiementDTO;
 import com.immocorp.dto.PaiementRequest;
-import com.immocorp.entity.*;
 import com.immocorp.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -21,12 +19,12 @@ public class PaiementController {
     private final QuittanceService quittanceService;
 
     @PostMapping
-    public ResponseEntity<Paiement> enregistrer(@RequestBody PaiementRequest request) {
+    public ResponseEntity<PaiementDTO> enregistrer(@RequestBody PaiementRequest request) {
         return ResponseEntity.ok(paiementService.enregistrer(request));
     }
 
     @GetMapping("/bail/{bailId}")
-    public ResponseEntity<List<Paiement>> listerParBail(@PathVariable Long bailId) {
+    public ResponseEntity<List<PaiementDTO>> listerParBail(@PathVariable Long bailId) {
         return ResponseEntity.ok(paiementService.listerParBail(bailId));
     }
 
