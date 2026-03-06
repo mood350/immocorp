@@ -1,6 +1,6 @@
-// PaiementService.java
 package com.immocorp.service;
 
+import com.immocorp.dto.PaiementDTO;
 import com.immocorp.dto.PaiementRequest;
 import com.immocorp.entity.*;
 import com.immocorp.repository.*;
@@ -8,8 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,11 +21,12 @@ public class PaiementService {
     private final AlerteService alerteService;
 
     @Transactional
-    public Paiement enregistrer(PaiementRequest request) {
+    public PaiementDTO enregistrer(PaiementRequest request) {
         Bail bail = bailRepository.findById(request.getBailId())
                 .orElseThrow(() -> new RuntimeException("Bail non trouvé"));
 
-        if (paiementRepository.existsByBailIdAndMoisConcerne(bail.getId(), request.getMoisConcerne())) {
+        if (paiementRepository.existsByBailIdAndMoisConcerne(
+                bail.getId(), request.getMoisConcerne())) {
             throw new RuntimeException("Paiement déjà enregistré pour ce mois");
         }
 
@@ -41,15 +42,32 @@ public class PaiementService {
         paiement = paiementRepository.save(paiement);
 
         // Générer la quittance automatiquement
-        quittanceService.generer(paiement);
+        Quittance quittance = quittanceService.generer(paiement);
 
         // Supprimer alerte de retard si elle existe
         alerteService.supprimerAlerteRetard(bail.getId());
 
-        return paiement;
+        return toDTO(paiement, quittance.getId());
     }
 
-    public List<Paiement> listerParBail(Long bailId) {
-        return paiementRepository.findByBailId(bailId);
+    public List<PaiementDTO> listerParBail(Long bailId) {
+        return paiementRepository.findByBailId(bailId)
+                .stream()
+                .map(p -> toDTO(p,
+                        p.getQuittance() != null ? p.getQuittance().getId() : null))
+                .collect(Collectors.toList());
+    }
+
+    private PaiementDTO toDTO(Paiement p, Long quittanceId) {
+        PaiementDTO dto = new PaiementDTO();
+        dto.setId(p.getId());
+        dto.setDatePaiement(p.getDatePaiement());
+        dto.setMontant(p.getMontant());
+        dto.setMoisConcerne(p.getMoisConcerne());
+        dto.setMoyenPaiement(p.getMoyenPaiement().name());
+        dto.setReferencePaiement(p.getReferencePaiement());
+        dto.setBailId(p.getBail().getId());
+        dto.setQuittanceId(quittanceId);
+        return dto;
     }
 }
