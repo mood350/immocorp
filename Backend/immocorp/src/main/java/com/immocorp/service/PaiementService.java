@@ -19,6 +19,7 @@ public class PaiementService {
     private final BailRepository bailRepository;
     private final QuittanceService quittanceService;
     private final AlerteService alerteService;
+    private final TwilioSmsService twilioSmsService; // ✅ Twilio
 
     @Transactional
     public PaiementDTO enregistrer(PaiementRequest request) {
@@ -46,6 +47,24 @@ public class PaiementService {
 
         // Supprimer alerte de retard si elle existe
         alerteService.supprimerAlerteRetard(bail.getId());
+
+        String nomLocataire = bail.getLocataire().getNom()
+                + " " + bail.getLocataire().getPrenom();
+
+        // ✅ SMS confirmation paiement
+        twilioSmsService.notifierPaiementRecu(
+                nomLocataire,
+                bail.getPropriete().getAdresse(),
+                paiement.getMontant(),
+                paiement.getMoisConcerne()
+        );
+
+        // ✅ SMS quittance générée
+        twilioSmsService.notifierQuittanceGeneree(
+                nomLocataire,
+                paiement.getMoisConcerne(),
+                quittance.getId()
+        );
 
         return toDTO(paiement, quittance.getId());
     }
