@@ -36,4 +36,8 @@ public class Alerte {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bail_id")
     private Bail bail;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private boolean emailEnvoye = false;
 }
