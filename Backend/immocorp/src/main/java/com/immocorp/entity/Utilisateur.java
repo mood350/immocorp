@@ -41,6 +41,12 @@ public class Utilisateur implements UserDetails {
     @Column(nullable = false)
     private Role role;
 
+    @Builder.Default
+    @Column(nullable = false)
+    private boolean actif = true;
+
+
+
     @Override
     @JsonIgnore // ✅ Cache "authorities"
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -51,5 +57,5 @@ public class Utilisateur implements UserDetails {
     @Override @JsonIgnore public boolean isAccountNonExpired() { return true; }
     @Override @JsonIgnore public boolean isAccountNonLocked() { return true; }
     @Override @JsonIgnore public boolean isCredentialsNonExpired() { return true; }
-    @Override @JsonIgnore public boolean isEnabled() { return true; }
+    @Override @JsonIgnore public boolean isEnabled() { return actif; }
 }
