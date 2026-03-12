@@ -1,0 +1,99 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h2>Paiements</h2>
+      <span class="subtitle">Historique des loyers</span>
+    </div>
+    <button mat-raised-button color="primary" (click)="openDialog()">
+      <mat-icon>add</mat-icon> Enregistrer
+    </button>
+  </div>
+
+  <mat-card class="filter-card">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Sélectionner un bail</mat-label>
+      <mat-select (selectionChange)="onBailChange($event.value)">
+        @for (b of baux(); track b.id) {
+          <mat-option [value]="b.id">{{ getBailLabel(b) }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-card>
+
+  @if (!selectedBailId()) {
+    <div class="empty-state">
+      <mat-icon>payments</mat-icon>
+      <p>Sélectionnez un bail pour voir les paiements</p>
+    </div>
+  } @else if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  } @else if (paiements().length === 0) {
+    <div class="empty-state">
+      <mat-icon>receipt_long</mat-icon>
+      <p>Aucun paiement pour ce bail</p>
+    </div>
+  } @else {
+    <mat-card>
+      <table mat-table [dataSource]="paiements()">
+        <ng-container matColumnDef="mois">
+          <th mat-header-cell *matHeaderCellDef>Mois</th>
+          <td mat-cell *matCellDef="let p">{{ p.moisConcerne }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="montant">
+          <th mat-header-cell *matHeaderCellDef>Montant</th>
+          <td mat-cell *matCellDef="let p">{{ formatMontant(p.montant) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="moyen">
+          <th mat-header-cell *matHeaderCellDef>Moyen</th>
+          <td mat-cell *matCellDef="let p">
+            <span class="badge">{{ p.moyenPaiement }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="reference">
+          <th mat-header-cell *matHeaderCellDef>Référence</th>
+          <td mat-cell *matCellDef="let p">{{ p.referencePaiement ?? '—' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <td mat-cell *matCellDef="let p">{{ p.datePaiement | date:'dd/MM/yyyy' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Quittance</th>
+          <td mat-cell *matCellDef="let p">
+            <!-- Télécharger PDF -->
+            <button mat-icon-button color="primary"
+                    (click)="downloadPdf(p)"
+                    [disabled]="loadingPdf() === p.id"
+                    matTooltip="Télécharger PDF">
+              @if (loadingPdf() === p.id) {
+                <mat-spinner diameter="20" />
+              } @else {
+                <mat-icon>picture_as_pdf</mat-icon>
+              }
+            </button>
+
+            <!-- Envoyer par email -->
+            <button mat-icon-button color="accent"
+                    (click)="envoyerEmail(p)"
+                    [disabled]="loadingEmail() === p.id"
+                    matTooltip="Envoyer par email">
+              @if (loadingEmail() === p.id) {
+                <mat-spinner diameter="20" />
+              } @else {
+                <mat-icon>email</mat-icon>
+              }
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-card>
+  }
+</div>
