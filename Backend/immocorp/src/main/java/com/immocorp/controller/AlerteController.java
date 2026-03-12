@@ -1,5 +1,6 @@
 package com.immocorp.controller;
 
+import com.immocorp.dto.AlerteDTO;
 import com.immocorp.dto.AlerteManuelleRequest;
 import com.immocorp.entity.*;
 import com.immocorp.service.AlerteService;
@@ -18,19 +19,31 @@ public class AlerteController {
 
     private final AlerteService alerteService;
 
+    // ✅ Alertes du propriétaire connecté — retourne DTO
     @GetMapping
-    public ResponseEntity<List<Alerte>> lister(@AuthenticationPrincipal Utilisateur user) {
+    public ResponseEntity<List<AlerteDTO>> lister(
+            @AuthenticationPrincipal Utilisateur user) {
         return ResponseEntity.ok(alerteService.listerParProprietaire(user.getId()));
     }
 
+    // ✅ Toutes les alertes (admin) — retourne DTO
+    @GetMapping("/toutes")
+    public ResponseEntity<List<AlerteDTO>> listerToutes() {
+        return ResponseEntity.ok(alerteService.listerToutes());
+    }
+
+    // ✅ Non lues — retourne DTO
     @GetMapping("/non-lues")
-    public ResponseEntity<List<Alerte>> listerNonLues(@AuthenticationPrincipal Utilisateur user) {
+    public ResponseEntity<List<AlerteDTO>> listerNonLues(
+            @AuthenticationPrincipal Utilisateur user) {
         return ResponseEntity.ok(alerteService.listerNonLues(user.getId()));
     }
 
     @GetMapping("/non-lues/count")
-    public ResponseEntity<Map<String, Long>> compterNonLues(@AuthenticationPrincipal Utilisateur user) {
-        return ResponseEntity.ok(Map.of("count", alerteService.compterNonLues(user.getId())));
+    public ResponseEntity<Map<String, Long>> compterNonLues(
+            @AuthenticationPrincipal Utilisateur user) {
+        return ResponseEntity.ok(
+                Map.of("count", alerteService.compterNonLues(user.getId())));
     }
 
     @PutMapping("/{id}/lire")
@@ -40,25 +53,23 @@ public class AlerteController {
     }
 
     @PostMapping("/manuel")
-    public ResponseEntity<?> creerManuelle(@RequestBody AlerteManuelleRequest request) {
+    public ResponseEntity<?> creerManuelle(
+            @RequestBody AlerteManuelleRequest request) {
         try {
-            TypeAlerte type = TypeAlerte.valueOf(request.getType().toUpperCase().trim());
-            Alerte alerte = alerteService.creerAlerteManuelle(
-                    request.getBailId(),
-                    type,
-                    request.getMessage()
-            );
-            return ResponseEntity.ok(alerte);
+            TypeAlerte type = TypeAlerte.valueOf(
+                    request.getType().toUpperCase().trim());
+            alerteService.creerAlerteManuelle(
+                    request.getBailId(), type, request.getMessage());
+            return ResponseEntity.ok("Alerte créée ✅");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(
-                    "Type invalide. Valeurs acceptées : RETARD_PAIEMENT, FIN_BAIL_PROCHE, LOYER_IMPAYE, ECHEANCE_BAIL"
-            );
+                    "Type invalide. Valeurs : RETARD_PAIEMENT, FIN_BAIL_PROCHE, LOYER_IMPAYE, ECHEANCE_BAIL");
         }
     }
 
     @PostMapping("/declencher-verification")
     public ResponseEntity<String> declencherVerification() {
         alerteService.verifierRetardsPaiements();
-        return ResponseEntity.ok("✅ Vérification déclenchée ! Consultez GET /api/alertes");
+        return ResponseEntity.ok("✅ Vérification déclenchée !");
     }
 }
