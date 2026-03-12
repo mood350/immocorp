@@ -1,0 +1,60 @@
+<div class="dashboard">
+  <div class="page-header">
+    <h2>Tableau de bord</h2>
+    <span class="subtitle">Vue d'ensemble de votre portefeuille</span>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center">
+      <mat-spinner diameter="48" />
+    </div>
+  } @else {
+    <div class="stats-grid">
+      @for (card of cards; track card.key) {
+        <mat-card class="stat-card" [routerLink]="card.route">
+          <mat-card-content>
+            <div class="stat-content">
+              <div class="stat-info">
+                <span class="stat-label">{{ card.label }}</span>
+                <span class="stat-value">{{ getStatValue(card.key) }}</span>
+              </div>
+              <div class="stat-icon" [style.background]="card.color + '20'">
+                <mat-icon [style.color]="card.color">{{ card.icon }}</mat-icon>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+
+    <mat-card class="revenue-card">
+      <mat-card-content>
+        <div class="revenue-content">
+          <div>
+            <p class="revenue-label">Total loyers perçus</p>
+            <p class="revenue-value">{{ formatMontant(stats()?.totalLoyersPercus ?? 0) }}</p>
+          </div>
+          <mat-icon class="revenue-icon">account_balance_wallet</mat-icon>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="shortcuts">
+      <h3>Actions rapides</h3>
+      <div class="shortcuts-grid">
+        <button mat-raised-button routerLink="/proprietes" color="primary">
+          <mat-icon>add_home</mat-icon> Nouvelle propriété
+        </button>
+        <button mat-raised-button routerLink="/locataires" color="primary">
+          <mat-icon>person_add</mat-icon> Nouveau locataire
+        </button>
+        <button mat-raised-button routerLink="/baux" color="primary">
+          <mat-icon>post_add</mat-icon> Nouveau bail
+        </button>
+        <button mat-raised-button routerLink="/paiements" color="primary">
+          <mat-icon>payments</mat-icon> Enregistrer paiement
+        </button>
+      </div>
+    </div>
+  }
+</div>
