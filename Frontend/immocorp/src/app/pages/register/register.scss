@@ -1,0 +1,32 @@
+// Même styles que login.scss
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1B4F72 0%, #2E86C1 100%);
+  padding: 24px;
+}
+.login-card {
+  width: 100%;
+  max-width: 460px;
+  padding: 32px;
+  border-radius: 16px !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3) !important;
+}
+.login-logo {
+  text-align: center;
+  margin-bottom: 24px;
+  .logo-icon { font-size: 48px; width: 48px; height: 48px; color: #1B4F72; }
+  h1 { font-size: 24px; font-weight: 700; color: #1B4F72; margin: 8px 0 4px; }
+  p { color: #888; font-size: 14px; margin: 0; }
+}
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.full-width { width: 100%; }
+.submit-btn { margin-top: 8px; height: 48px; font-size: 16px; font-weight: 600; }
+.register-link {
+  text-align: center; color: #666; font-size: 14px; width: 100%;
+  a { color: #1B4F72; font-weight: 600; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+}
+mat-card-actions { padding: 0 !important; }

@@ -1,0 +1,114 @@
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div>
+      <h2>Alertes</h2>
+      <span class="subtitle">
+        {{ alertes().length }} alerte(s) —
+        <strong>{{ nonLues() }} non lue(s)</strong>
+      </span>
+    </div>
+    @if (nonLues() > 0) {
+      <button mat-stroked-button (click)="marquerToutesLues()">
+        <mat-icon>done_all</mat-icon>
+        Tout marquer comme lu
+      </button>
+    }
+  </div>
+
+  <!-- FILTRES -->
+  <div class="filtres-container">
+    @for (f of filtres; track f.key) {
+      <button
+        class="filtre-btn"
+        [class.actif]="filtreActif() === f.key"
+        (click)="setFiltre(f.key)">
+        <mat-icon>{{ f.icon }}</mat-icon>
+        <span>{{ f.label }}</span>
+        @if (compterParFiltre(f.key) > 0) {
+          <span class="filtre-count">{{ compterParFiltre(f.key) }}</span>
+        }
+      </button>
+    }
+  </div>
+
+  <!-- CONTENU -->
+  @if (loading()) {
+    <div class="loading-center">
+      <mat-spinner diameter="48" />
+    </div>
+
+  } @else if (alertesFiltrees().length === 0) {
+    <div class="empty-state">
+      <mat-icon>notifications_none</mat-icon>
+      <p>Aucune alerte{{ filtreActif() !== 'TOUTES' ? ' dans cette catégorie' : '' }}</p>
+      @if (filtreActif() !== 'TOUTES') {
+        <button mat-stroked-button (click)="setFiltre('TOUTES')">
+          Voir toutes les alertes
+        </button>
+      }
+    </div>
+
+  } @else {
+    <div class="alertes-list">
+      @for (alerte of alertesFiltrees(); track alerte.id) {
+        <mat-card
+          class="alerte-card"
+          [class.lue]="alerte.estLue"
+          [style.border-left-color]="getColor(alerte.type)"
+          (click)="marquerLue(alerte)">
+
+          <mat-card-content>
+            <div class="alerte-content">
+
+              <!-- Icône -->
+              <div class="alerte-icon"
+                   [style.background]="getColor(alerte.type) + '20'">
+                <mat-icon [style.color]="getColor(alerte.type)">
+                  {{ getIcon(alerte.type) }}
+                </mat-icon>
+              </div>
+
+              <!-- Infos -->
+              <div class="alerte-info">
+                <div class="alerte-header-row">
+                  <span class="alerte-type"
+                        [style.color]="getColor(alerte.type)">
+                    {{ getLabel(alerte.type) }}
+                  </span>
+                  <span class="alerte-date">
+                    {{ alerte.dateAlerte | date:'dd/MM/yyyy à HH:mm' }}
+                  </span>
+                </div>
+                <p class="alerte-message">{{ alerte.message }}</p>
+                <div class="alerte-footer">
+                  @if (alerte.estLue) {
+                    <span class="badge lue">
+                      <mat-icon>check</mat-icon> Lue
+                    </span>
+                  } @else {
+                    <span class="badge non-lue">
+                      <mat-icon>circle</mat-icon> Non lue
+                    </span>
+                  }
+                  @if (alerte.emailEnvoye) {
+                    <span class="badge email">
+                      <mat-icon>email</mat-icon> Email envoyé
+                    </span>
+                  }
+                </div>
+              </div>
+
+              <!-- Point rouge si non lue -->
+              @if (!alerte.estLue) {
+                <div class="unread-dot"></div>
+              }
+
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,61 @@
+@if (showNav()) {
+  <nav class="navbar">
+    <div class="nav-brand">
+      <mat-icon>apartment</mat-icon>
+      <span>ImmoCorp</span>
+    </div>
+
+    <div class="nav-links">
+      <a routerLink="/dashboard" routerLinkActive="active">
+        <mat-icon>dashboard</mat-icon>
+        <span>Tableau de bord</span>
+      </a>
+
+      @if (!isAdmin()) {
+        <a routerLink="/proprietes" routerLinkActive="active">
+          <mat-icon>home</mat-icon>
+          <span>Propriétés</span>
+        </a>
+        <a routerLink="/locataires" routerLinkActive="active">
+          <mat-icon>people</mat-icon>
+          <span>Locataires</span>
+        </a>
+        <a routerLink="/baux" routerLinkActive="active">
+          <mat-icon>description</mat-icon>
+          <span>Baux</span>
+        </a>
+        <a routerLink="/paiements" routerLinkActive="active">
+          <mat-icon>payments</mat-icon>
+          <span>Paiements</span>
+        </a>
+        <a routerLink="/alertes" routerLinkActive="active">
+          <mat-icon>notifications</mat-icon>
+          <span>Alertes</span>
+        </a>
+      }
+
+      @if (isAdmin()) {
+        <a routerLink="/admin" routerLinkActive="active">
+          <mat-icon>admin_panel_settings</mat-icon>
+          <span>Administration</span>
+        </a>
+      }
+    </div>
+
+    <div class="nav-user">
+      @if (authService.currentUser()) {
+        <div class="user-info">
+          <div class="user-avatar">{{ userInitials() }}</div>
+          <span class="user-name">{{ userName() }}</span>
+        </div>
+      }
+      <button mat-icon-button (click)="logout()" title="Déconnexion">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
+  </nav>
+}
+
+<div class="main-content" [class.with-navbar]="showNav()">
+  <router-outlet />
+</div>

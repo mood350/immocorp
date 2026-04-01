@@ -1,0 +1,194 @@
+<div class="landing">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="grid-overlay"></div>
+    </div>
+
+    <nav class="hero-nav">
+      <div class="nav-logo">
+        <mat-icon>apartment</mat-icon>
+        <span>ImmoCorp</span>
+      </div>
+      <div class="nav-actions">
+        <a routerLink="/login" class="btn-ghost">Se connecter</a>
+        <a routerLink="/register" class="btn-primary">Commencer gratuitement</a>
+      </div>
+    </nav>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <mat-icon>verified</mat-icon>
+        <span>Plateforme de gestion locative #1 au Togo</span>
+      </div>
+
+      <h1 class="hero-title">
+        Gérez vos biens<br>
+        <span class="gradient-text">sans effort</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        ImmoCorp automatise la gestion de vos propriétés locatives —
+        quittances PDF, alertes SMS, suivi des paiements et bien plus.
+        Concentrez-vous sur l'essentiel.
+      </p>
+
+      <div class="hero-cta">
+        <a routerLink="/register" class="btn-primary btn-large">
+          <mat-icon>rocket_launch</mat-icon>
+          Démarrer maintenant
+        </a>
+        <a routerLink="/login" class="btn-outline btn-large">
+          <mat-icon>login</mat-icon>
+          J'ai déjà un compte
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        @for (stat of stats; track stat.label) {
+          <div class="stat-item">
+            <span class="stat-value">{{ stat.value }}</span>
+            <span class="stat-label">{{ stat.label }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Mockup flottant -->
+    <div class="hero-mockup">
+      <div class="mockup-window">
+        <div class="mockup-bar">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+          <span class="mockup-url">immocorp.app/dashboard</span>
+        </div>
+        <div class="mockup-content">
+          <div class="mockup-sidebar">
+            <div class="mock-logo">IC</div>
+            @for (item of ['home','people','description','payments','notifications']; track item) {
+              <div class="mock-nav-item">
+                <mat-icon>{{ item }}</mat-icon>
+              </div>
+            }
+          </div>
+          <div class="mockup-main">
+            <div class="mock-header">Tableau de bord</div>
+            <div class="mock-cards">
+              <div class="mock-card blue">
+                <span class="mock-num">3</span>
+                <span class="mock-lbl">Propriétés</span>
+              </div>
+              <div class="mock-card green">
+                <span class="mock-num">2</span>
+                <span class="mock-lbl">Locataires</span>
+              </div>
+              <div class="mock-card purple">
+                <span class="mock-num">230K</span>
+                <span class="mock-lbl">FCFA</span>
+              </div>
+              <div class="mock-card red">
+                <span class="mock-num">1</span>
+                <span class="mock-lbl">Alertes</span>
+              </div>
+            </div>
+            <div class="mock-list">
+              @for (i of [1,2,3]; track i) {
+                <div class="mock-row">
+                  <div class="mock-avatar"></div>
+                  <div class="mock-lines">
+                    <div class="mock-line long"></div>
+                    <div class="mock-line short"></div>
+                  </div>
+                  <div class="mock-badge">Actif</div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURES ===== -->
+  <section class="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Fonctionnalités</span>
+        <h2>Tout ce dont vous avez besoin</h2>
+        <p>Une suite complète d'outils pensée pour les propriétaires togolais</p>
+      </div>
+
+      <div class="features-grid">
+        @for (f of features; track f.title) {
+          <div class="feature-card">
+            <div class="feature-icon">
+              <mat-icon>{{ f.icon }}</mat-icon>
+            </div>
+            <h3>{{ f.title }}</h3>
+            <p>{{ f.desc }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COMMENT ÇA MARCHE ===== -->
+  <section class="how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Comment ça marche</span>
+        <h2>Opérationnel en 5 minutes</h2>
+        <p>Un processus simple et guidé pour démarrer rapidement</p>
+      </div>
+
+      <div class="steps">
+        @for (step of steps; track step.num) {
+          <div class="step">
+            <div class="step-num">{{ step.num }}</div>
+            <div class="step-content">
+              <h3>{{ step.title }}</h3>
+              <p>{{ step.desc }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA FINAL ===== -->
+  <section class="cta-section">
+    <div class="cta-bg">
+      <div class="blob blob-3"></div>
+    </div>
+    <div class="container cta-content">
+      <h2>Prêt à simplifier votre gestion locative ?</h2>
+      <p>Rejoignez les propriétaires qui font confiance à ImmoCorp</p>
+      <a routerLink="/register" class="btn-primary btn-large btn-white">
+        <mat-icon>rocket_launch</mat-icon>
+        Créer mon compte gratuitement
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <mat-icon>apartment</mat-icon>
+        <span>ImmoCorp</span>
+      </div>
+      <p class="footer-copy">
+        © 2026 ImmoCorp — Gestion locative intelligente au Togo
+      </p>
+      <div class="footer-links">
+        <a routerLink="/login">Connexion</a>
+        <a routerLink="/register">Inscription</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
