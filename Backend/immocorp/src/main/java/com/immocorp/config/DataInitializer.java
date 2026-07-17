@@ -25,7 +25,11 @@ public class DataInitializer implements CommandLineRunner {
                     .prenom("ImmoCorp")
                     .email("admin@immocorp.com")
                     .password(passwordEncoder.encode("Admin@2026"))
+<<<<<<< HEAD
                     .telephone("+22890262138")
+=======
+                    .telephone("+22890000000")
+>>>>>>> 676aa67226cf564126769b279dfdd43d869195a8
                     .role(Role.ADMIN)
                     .build();
             utilisateurRepository.save(admin);

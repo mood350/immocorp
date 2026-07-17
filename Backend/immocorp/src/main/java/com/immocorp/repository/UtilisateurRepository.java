@@ -11,4 +11,9 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> 
     long countByActifTrue();
     long countByRole(Role role);
     boolean existsByEmail(String email);
+<<<<<<< HEAD
+=======
+    Optional<Utilisateur> findByEmailOrTelephone(String email, String telephone);
+    boolean existsByTelephone(String telephone);
+>>>>>>> 676aa67226cf564126769b279dfdd43d869195a8
 }
